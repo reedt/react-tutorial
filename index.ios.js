@@ -9,6 +9,7 @@ import React, {
 } from 'react';
 import {
   AppRegistry,
+  ListView,
   StyleSheet,
   Text,
   View,
@@ -24,6 +25,11 @@ const firebaseConfig = {
   storageBucket: "<your-storage-bucket>",
 };
 const firebaseApp = firebase.initializeApp(firebaseConfig);
+
+const styles = require('./styles.js');
+const StatusBar = require('./components/StatusBar.js');
+const ListItem = require('./components/ListItem.js');
+const ActionButton = require('./components/ActionButton.js');
 
 // class Greeting extends Component {
 //   render() {
@@ -58,34 +64,65 @@ const firebaseApp = firebase.initializeApp(firebaseConfig);
 //     );
 //   }
 // }
-
 class Tutorial extends Component {
-  render() {
+  constructor(props) {
+    super(props);
+    this.state = {
+      dataSource: new ListView.DataSource({
+        rowHasChanged: (row1, row2) => row1 !== row2,
+      })
+    };
+  }
+
+  _renderItem(item) {
     return (
-        <View style={styles.container}>
-        <Text> sup </Text>
-        </View>
+      <ListItem item="{item}" onpress={"()" ==""> {}} />
     );
   }
+
+  render() {
+    return (
+      <View style={styles.container}>
+      <StatusBar title="Grocery List" />
+        <ListView datasource={this.state.dataSource} renderrow={this._renderItem.bind(this)} style={styles.listview} />
+      <ActionButton title="Add" onpress={"()" ==""> {}} />
+      </View>
+    );
+  }
+
+  componentDidMount() {
+    this.setState({
+      dataSource: this.state.dataSource.cloneWithRows([{ title: 'Pizza' }])
+    })
+  }
+
+  // render() {
+  //   return (
+  //       <View style={styles.container}>
+  //       <Text> sup </Text>
+  //       </View>
+  //   );
+  // }
+
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     backgroundColor: '#F5FCFF',
+//   },
+//   welcome: {
+//     fontSize: 20,
+//     textAlign: 'center',
+//     margin: 10,
+//   },
+//   instructions: {
+//     textAlign: 'center',
+//     color: '#333333',
+//     marginBottom: 5,
+//   },
+// });
 
 AppRegistry.registerComponent('Tutorial', () => Tutorial);
